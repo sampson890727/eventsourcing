@@ -1,0 +1,5 @@
+packages
+/src/CodeSharp.EventSourcing/obj
+/src/CodeSharp.EventSourcing/bin
+obj
+bin

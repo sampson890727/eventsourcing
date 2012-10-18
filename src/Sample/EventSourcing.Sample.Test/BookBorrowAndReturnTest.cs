@@ -6,9 +6,8 @@ using NUnit.Framework;
 
 namespace EventSourcing.Sample.Test
 {
-    /// <summary>
-    /// 单元测试类，用于测试图书入库、借书，以及还书的功能
-    /// </summary>
+    [TestFixture]
+    [Microsoft.VisualStudio.TestTools.UnitTesting.TestClass]
     public class BookBorrowAndReturnTest : TestBase
     {
         [Test]

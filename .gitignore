@@ -5,3 +5,5 @@ obj
 bin
 /CodeSharp.EventSourcing-2010.suo
 /CodeSharp.EventSourcing.v11.suo
+/build
+/nupkgFiles

@@ -64,7 +64,7 @@ namespace CodeSharp.EventSourcing
                 return null;
             }
 
-            var messageType = Type.GetType(message.Headers[TransportHeaderKeys.MessageFullTypeName]);
+            var messageType = Type.GetType(messageTypeFullName);
 
             return _jsonSerializer.Deserialize(json, messageType);
         }

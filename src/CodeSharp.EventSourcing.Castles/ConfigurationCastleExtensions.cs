@@ -1,4 +1,6 @@
-﻿using Castle.MicroKernel.Registration;
+﻿//Copyright (c) CodeSharp.  All rights reserved.
+
+using Castle.MicroKernel.Registration;
 using Castle.Services.Transaction;
 using Castle.Windsor;
 using Castle.Windsor.Configuration.Interpreters;

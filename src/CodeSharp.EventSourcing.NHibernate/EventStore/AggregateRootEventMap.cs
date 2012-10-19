@@ -1,4 +1,6 @@
-﻿using FluentNHibernate.Mapping;
+﻿//Copyright (c) CodeSharp.  All rights reserved.
+
+using FluentNHibernate.Mapping;
 using NHibernate.Mapping.ByCode.Conformist;
 
 namespace CodeSharp.EventSourcing.NHibernate

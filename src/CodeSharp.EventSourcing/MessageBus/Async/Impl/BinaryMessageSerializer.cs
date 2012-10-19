@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿//Copyright (c) CodeSharp.  All rights reserved.
+
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.Serialization.Formatters.Binary;

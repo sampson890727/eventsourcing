@@ -1,4 +1,6 @@
-﻿using System.IO;
+﻿//Copyright (c) CodeSharp.  All rights reserved.
+
+using System.IO;
 
 namespace CodeSharp.EventSourcing
 {

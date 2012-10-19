@@ -1,3 +1,5 @@
+//Copyright (c) CodeSharp.  All rights reserved.
+
 using Castle.Facilities.NHibernateIntegration;
 using NHibernate;
 

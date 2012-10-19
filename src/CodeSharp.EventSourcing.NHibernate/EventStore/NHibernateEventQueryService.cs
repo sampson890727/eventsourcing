@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿//Copyright (c) CodeSharp.  All rights reserved.
+
+using System.Collections.Generic;
 using NHibernate;
 
 namespace CodeSharp.EventSourcing.NHibernate

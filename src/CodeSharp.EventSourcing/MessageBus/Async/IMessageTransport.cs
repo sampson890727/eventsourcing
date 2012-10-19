@@ -1,4 +1,6 @@
-﻿namespace CodeSharp.EventSourcing
+﻿//Copyright (c) CodeSharp.  All rights reserved.
+
+namespace CodeSharp.EventSourcing
 {
     /// <summary>
     /// Defines a transport to send and receive message.

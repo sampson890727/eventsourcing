@@ -1,3 +1,5 @@
+//Copyright (c) CodeSharp.  All rights reserved.
+
 using System.Collections.Generic;
 using System.Linq;
 using Castle.Services.Transaction;

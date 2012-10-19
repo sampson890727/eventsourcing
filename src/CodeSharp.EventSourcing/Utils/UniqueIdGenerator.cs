@@ -1,4 +1,6 @@
-﻿namespace CodeSharp.EventSourcing
+﻿//Copyright (c) CodeSharp.  All rights reserved.
+
+namespace CodeSharp.EventSourcing
 {
     /// <summary>
     /// 唯一标识生成器接口定义

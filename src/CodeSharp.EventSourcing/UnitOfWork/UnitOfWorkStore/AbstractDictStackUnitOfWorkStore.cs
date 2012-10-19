@@ -1,3 +1,5 @@
+//Copyright (c) CodeSharp.  All rights reserved.
+
 using System;
 using System.Collections;
 using System.Collections.Specialized;

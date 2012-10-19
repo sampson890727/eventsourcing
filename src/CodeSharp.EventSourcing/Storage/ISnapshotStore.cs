@@ -1,4 +1,6 @@
-﻿namespace CodeSharp.EventSourcing
+﻿//Copyright (c) CodeSharp.  All rights reserved.
+
+namespace CodeSharp.EventSourcing
 {
     /// <summary>
     /// 表示事件快照的持久化存储设备

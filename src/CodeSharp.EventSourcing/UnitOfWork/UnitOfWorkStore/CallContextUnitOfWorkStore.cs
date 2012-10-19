@@ -1,3 +1,5 @@
+//Copyright (c) CodeSharp.  All rights reserved.
+
 using System.Collections;
 using System.Runtime.Remoting.Messaging;
 

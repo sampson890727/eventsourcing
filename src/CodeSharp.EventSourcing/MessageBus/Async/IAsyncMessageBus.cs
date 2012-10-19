@@ -1,4 +1,6 @@
-﻿namespace CodeSharp.EventSourcing
+﻿//Copyright (c) CodeSharp.  All rights reserved.
+
+namespace CodeSharp.EventSourcing
 {
     /// <summary>
     /// 异步模式消息总线接口定义

@@ -1,4 +1,6 @@
-﻿namespace CodeSharp.EventSourcing.NHibernate
+﻿//Copyright (c) CodeSharp.  All rights reserved.
+
+namespace CodeSharp.EventSourcing.NHibernate
 {
     public class NHibernateEventStoreProvider : IEventStoreProvider
     {

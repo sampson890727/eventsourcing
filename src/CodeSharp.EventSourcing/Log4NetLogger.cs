@@ -1,4 +1,6 @@
-﻿using System;
+﻿//Copyright (c) CodeSharp.  All rights reserved.
+
+using System;
 using log4net;
 
 namespace CodeSharp.EventSourcing

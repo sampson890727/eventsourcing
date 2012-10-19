@@ -1,3 +1,5 @@
+--Copyright (c) CodeSharp.  All rights reserved.
+
 SET ANSI_NULLS ON
 GO
 

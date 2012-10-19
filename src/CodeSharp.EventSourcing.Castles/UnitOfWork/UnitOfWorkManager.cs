@@ -1,3 +1,5 @@
+//Copyright (c) CodeSharp.  All rights reserved.
+
 using System;
 using Castle.Services.Transaction;
 using ICastleTransaction = Castle.Services.Transaction.ITransaction;

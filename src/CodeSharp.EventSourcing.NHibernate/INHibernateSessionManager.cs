@@ -1,4 +1,6 @@
-﻿using NHibernate;
+﻿//Copyright (c) CodeSharp.  All rights reserved.
+
+using NHibernate;
 
 namespace CodeSharp.EventSourcing.NHibernate
 {

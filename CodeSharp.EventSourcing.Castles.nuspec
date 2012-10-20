@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
   <metadata>
     <id>CodeSharp.EventSourcing.Castles</id>
-    <version>1.0.0.5</version>
+    <version>1.0.0.6</version>
     <title>CodeSharp.EventSourcing.Castles</title>
     <authors>tangxuehua</authors>
     <owners>tangxuehua</owners>
@@ -11,7 +11,7 @@
     </description>
     <projectUrl>https://github.com/tangxuehua/eventsourcing</projectUrl>
     <licenseUrl>https://github.com/tangxuehua/eventsourcing/blob/master/license.txt</licenseUrl>
-    <iconUrl>https://github.com/tangxuehua/eventsourcing/blob/master/doc/CodeSharpLogo.png</iconUrl>
+    <iconUrl>https://raw.github.com/tangxuehua/eventsourcing/master/doc/CodeSharpLogo.png</iconUrl>
     <tags>DDD Event Sourcing CQRS Castle Transaction</tags>
     <copyright>2012</copyright>
     <language>zh-CN</language>
@@ -20,7 +20,7 @@
     	<dependency id="Castle.Core" version="3.1.0" />
     	<dependency id="Castle.Services.Transaction-xuehua" version="3.0.2" />
     	<dependency id="Castle.Windsor" version="3.1.0" />
-    	<dependency id="CodeSharp.EventSourcing" version="1.0.0.5" />
+    	<dependency id="CodeSharp.EventSourcing" version="1.0.0.6" />
     </dependencies>
   </metadata>
   <files>

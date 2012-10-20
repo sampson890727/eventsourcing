@@ -3,10 +3,10 @@ eventsourcing
 
 This is an open-source framework which implement the event sourcing pattern and CQRS architecture and is suitable for developing DDD based applications.
 
-1. 运行源代码前先执行命令build nuget以获取外部依赖的程序集。具体步骤：按住shit键，在当前菜单鼠标右键，在弹出的菜单项中选择“在此处打开命令窗口”，然后输入：build nuget，然后回车即可。
-2. 如果要调试代码，需要先新建一个空的SQL数据库，然后执行SQL脚本，脚本地址：src\Sample\EventSourcing.Sample.Model\GenerateTableScripts.sql
-3. 数据库连接字符串配置文件：src\Sample\EventSourcing.Sample.Test\ConfigFiles\properties.config
-4. 由于Sample中的代码默认是采用异步的消息总线，所以运行代码前需要安装MSMQ，否则会报错
+1. 运行源代码前先执行命令build nuget以获取外部依赖的程序集。具体步骤：在当前README.md文件所在目录，按住shit键，然后鼠标右键，在弹出的菜单项中选择“在此处打开命令窗口”，然后输入：build nuget，然后回车即可。注意：你的目录中不能包含空格，否则会出错！
+2. 如果要调试代码，需要先新建一个SQL数据库，比如名称叫EventSourcingTest，然后执行SQL脚本：scripts\GenerateTableScripts.sql
+3. 修改数据库连接字符串，配置文件目录：src\Sample\EventSourcing.Sample.Test\ConfigFiles\properties.config
+4. 由于Sample中的代码默认是采用异步的消息总线，所以运行代码前需要安装MSMQ，否则会报错。要安装MSMQ很简单，到控制面板->所有程序->启动或关闭Windows功能，然后选择MSMQ进行安装即可。
 
 
 ## License

@@ -2,13 +2,17 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
   <metadata>
     <id>CodeSharp.EventSourcing.Castles</id>
-    <version>1.0.0.1</version>
-    <title>EventSourcing Castle Integration</title>
+    <version>1.0.0.3</version>
+    <title>CodeSharp.EventSourcing.Castles</title>
     <authors>tangxuehua</authors>
     <owners>tangxuehua</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <description>This package aims to use Castle and Castle.Services.Transaction to implement the ioc and transaction functionality for codesharp.eventsourcing framework. Project Url:https://github.com/tangxuehua/eventsourcing
+    <description>Castle and Castle.Services.Transaction integrated with CodeSharp.EventSourcing to implement dependency injection and auto transaction functionality.
     </description>
+    <projectUrl>https://github.com/tangxuehua/eventsourcing</projectUrl>
+    <licenseUrl>https://github.com/tangxuehua/eventsourcing/blob/master/license.txt</licenseUrl>
+    <iconUrl>https://cooper.apphb.com/favicon.ico</iconUrl>
+    <tags>DDD Event Sourcing CQRS Castle Transaction</tags>
     <copyright>2012</copyright>
     <language>zh-CN</language>
     <dependencies>
@@ -16,7 +20,7 @@
     	<dependency id="Castle.Core" version="3.1.0" />
     	<dependency id="Castle.Services.Transaction-xuehua" version="3.0.2" />
     	<dependency id="Castle.Windsor" version="3.1.0" />
-    	<dependency id="CodeSharp.EventSourcing" version="1.0.0.0" />
+    	<dependency id="CodeSharp.EventSourcing" version="1.0.0.2" />
     </dependencies>
   </metadata>
   <files>

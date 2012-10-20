@@ -2,13 +2,17 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
   <metadata>
     <id>CodeSharp.EventSourcing.NHibernate</id>
-    <version>1.0.0.2</version>
-    <title>EventSourcing NHibernate Integration</title>
+    <version>1.0.0.4</version>
+    <title>CodeSharp.EventSourcing.NHibernate</title>
     <authors>tangxuehua</authors>
     <owners>tangxuehua</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <description>This package aims to use NHibernate to implement the event and snapshot persistence functionality for codesharp.eventsourcing framework. Project Url:https://github.com/tangxuehua/eventsourcing
+    <description>NHibernate integrated with CodeSharp.EventSourcing to implement db-based event and snapshot persistence.
     </description>
+    <projectUrl>https://github.com/tangxuehua/eventsourcing</projectUrl>
+    <licenseUrl>https://github.com/tangxuehua/eventsourcing/blob/master/license.txt</licenseUrl>
+    <iconUrl>https://cooper.apphb.com/favicon.ico</iconUrl>
+    <tags>DDD Event Sourcing CQRS NHibernate</tags>
     <copyright>2012</copyright>
     <language>zh-CN</language>
     <dependencies>
@@ -19,7 +23,7 @@
     	<dependency id="FluentNHibernate" version="1.3.0.733" />
     	<dependency id="Iesi.Collections" version="3.2.0.4000" />
     	<dependency id="NHibernate" version="3.3.1.4000" />
-      <dependency id="CodeSharp.EventSourcing" version="1.0.0.0" />
+      <dependency id="CodeSharp.EventSourcing" version="1.0.0.2" />
     </dependencies>
   </metadata>
   <files>

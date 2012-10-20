@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
   <metadata>
     <id>CodeSharp.EventSourcing</id>
-    <version>1.0.0.2</version>
+    <version>1.0.0.5</version>
     <title>CodeSharp.EventSourcing</title>
     <authors>tangxuehua</authors>
     <owners>tangxuehua</owners>
@@ -11,7 +11,7 @@
     </description>
     <projectUrl>https://github.com/tangxuehua/eventsourcing</projectUrl>
     <licenseUrl>https://github.com/tangxuehua/eventsourcing/blob/master/license.txt</licenseUrl>
-    <iconUrl>https://cooper.apphb.com/favicon.ico</iconUrl>
+    <iconUrl>https://github.com/tangxuehua/eventsourcing/blob/master/doc/CodeSharpLogo.png</iconUrl>
     <tags>DDD Event Sourcing CQRS</tags>
     <copyright>2012</copyright>
     <language>zh-CN</language>

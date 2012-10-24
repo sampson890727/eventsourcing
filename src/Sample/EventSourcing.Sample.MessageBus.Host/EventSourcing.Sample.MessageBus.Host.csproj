@@ -1,0 +1,105 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{ABE28B1B-A7E8-4457-904F-6512AD9BC71E}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>EventSourcing.Sample.MessageBus.Host</RootNamespace>
+    <AssemblyName>EventSourcing.Sample.MessageBus.Host</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\CodeSharp.EventSourcing.Castles\CodeSharp.EventSourcing.Castles.csproj">
+      <Project>{22abacd3-1b32-434d-b8f1-6ec34def5815}</Project>
+      <Name>CodeSharp.EventSourcing.Castles</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\CodeSharp.EventSourcing.MessageBus.Host\CodeSharp.EventSourcing.MessageBus.Host.csproj">
+      <Project>{bbdf79b0-d467-463c-972a-e095bb6a1be6}</Project>
+      <Name>CodeSharp.EventSourcing.MessageBus.Host</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\CodeSharp.EventSourcing.NHibernate\CodeSharp.EventSourcing.NHibernate.csproj">
+      <Project>{489da574-037d-4a47-9246-e72c3288916b}</Project>
+      <Name>CodeSharp.EventSourcing.NHibernate</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\CodeSharp.EventSourcing\CodeSharp.EventSourcing.csproj">
+      <Project>{f884f01a-ed67-4f21-8576-fd2588491b24}</Project>
+      <Name>CodeSharp.EventSourcing</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\EventSourcing.Sample.Application\EventSourcing.Sample.Application.csproj">
+      <Project>{01ba7824-d469-43a7-bd6d-3fd5db2c537b}</Project>
+      <Name>EventSourcing.Sample.Application</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\EventSourcing.Sample.Entities.Mappings\EventSourcing.Sample.Entities.Mappings.csproj">
+      <Project>{5b40d5bf-c498-4056-8028-f3985239b845}</Project>
+      <Name>EventSourcing.Sample.Entities.Mappings</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\EventSourcing.Sample.Entities\EventSourcing.Sample.Entities.csproj">
+      <Project>{b6bd8f2b-7375-4537-955d-5d564498f7e5}</Project>
+      <Name>EventSourcing.Sample.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\EventSourcing.Sample.EventSubscribers\EventSourcing.Sample.EventSubscribers.csproj">
+      <Project>{bc2c4e31-affd-433a-815e-a92889e81265}</Project>
+      <Name>EventSourcing.Sample.EventSubscribers</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\EventSourcing.Sample.Model\EventSourcing.Sample.Model.csproj">
+      <Project>{b2e0767e-3441-493e-9acf-ca01100e2741}</Project>
+      <Name>EventSourcing.Sample.Model</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="ConfigFiles\facilities.config">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="ConfigFiles\log4net.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="ConfigFiles\properties.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

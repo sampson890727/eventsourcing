@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -16,187 +17,64 @@ namespace CodeSharp.EventSourcing
     public class Configuration
     {
         private static Configuration _instance;
-        private string _appName;
-        private string _root;
-        private string _propertiesFileName = "properties.config";
-        private IDictionary<string, ConfigItem> _properties;
+        private string _environment;
 
-        public static Configuration Instance
-        {
-            get
-            {
-                if (_instance == null)
-                {
-                    throw new NullReferenceException("未初始化框架配置");
-                }
-                return _instance;
-            }
-        }
-        public string AppName { get { return _appName; } }
+        /// <summary>
+        /// Singleton单例
+        /// </summary>
+        public static Configuration Instance { get { return _instance; } }
+        /// <summary>
+        /// 应用名称
+        /// </summary>
+        public string AppName { get; private set; }
+        /// <summary>
+        /// 应用的所有配置信息
+        /// </summary>
+        public IDictionary<string, string> Properties { get; private set; }
 
         private Configuration(string appName)
         {
-            if (string.IsNullOrWhiteSpace(appName))
+            if (string.IsNullOrEmpty(appName))
             {
                 throw new ArgumentNullException("appName");
             }
-            _appName = appName;
-            _properties = new Dictionary<string, ConfigItem>();
+
+            AppName = appName;
+            Properties = new Dictionary<string, string>();
         }
 
-        #region Config
-
-        /// <summary>
-        /// 初始化框架配置
-        /// </summary>
-        public static Configuration Config(string appName)
+        public static Configuration Create(string appName)
         {
             if (_instance != null)
             {
-                throw new InvalidOperationException("不可重复初始化框架配置");
+                throw new EventSourcingException("不可重复初始化框架配置");
             }
             _instance = new Configuration(appName);
             return _instance;
         }
-        /// <summary>从嵌入的xml文件中初始化框架配置
-        /// <remarks>
-        /// 配置项文件默认为properties.config
-        /// </remarks>
-        /// </summary>
-        public static Configuration ConfigWithEmbeddedXml(string appName, string versionFlag, string folder, Assembly assembly, string nameSpace)
-        {
-            return Configuration.ConfigWithEmbeddedXml(appName, versionFlag, folder, assembly, nameSpace, null);
-        }
-        /// <summary>从嵌入的xml文件中初始化框架配置
-        /// <remarks>
-        /// 配置项文件默认为properties.config
-        /// </remarks>
-        /// </summary>
-        public static Configuration ConfigWithEmbeddedXml(string appName, string versionFlag, string folder, Assembly assembly, string nameSpace, IDictionary<string, string> parameters)
-        {
-            //初始化配置
-            Configuration.Config(appName);
-            //配置文件生成路径
-            Configuration._instance._root = folder;
 
-            #region 生成配置文件
-            assembly.GetManifestResourceNames().ToList().ForEach(o =>
+        /// <summary>
+        /// 设置当前运行环境，可能的值有：Debug,Test,Release，只能设置一次
+        /// </summary>
+        /// <param name="environment"></param>
+        public void SetEnvironment(string environment)
+        {
+            if (_environment != null)
             {
-                //可以不使用版本versionFlag
-                var prefix = string.IsNullOrEmpty(versionFlag)
-                    ? string.Format("{0}.", nameSpace)
-                    : string.Format("{0}.{1}.", nameSpace, versionFlag);
-
-                //排除不符合命名空间的文件
-                if (o.IndexOf(prefix) < 0)
-                {
-                    return;
-                }
-                //properties文件
-                if (o.ToLower().IndexOf("properties.config") >= 0)
-                {
-                    _instance.ReadProperties(assembly, o);
-                    return;
-                }
-
-                using (var reader = new StreamReader(assembly.GetManifestResourceStream(o)))
-                {
-                    var content = reader.ReadToEnd();
-                    //替换自定义参数
-                    if (parameters != null)
-                        parameters.ToList().ForEach(p => content = content.Replace(p.Key, p.Value));
-                    //写入文件
-                    FileHelper.WriteTo(content
-                        , Configuration._instance._root
-                        , o.Replace(prefix, "")
-                        , FileMode.Create);
-                }
-            });
-            #endregion
-
-            return Configuration._instance;
-        }
-
-        #endregion
-
-        #region 配置追加 ReadProperties 耦合于properties.config
-
-        /// <summary>从指定程序集中读取配置
-        /// </summary>
-        /// <param name="assembly">程序集</param>
-        /// <param name="manifestResourceName">嵌入资源的完整名称</param>
-        /// <returns></returns>
-        public Configuration ReadProperties(Assembly assembly, string manifestResourceName)
-        {
-            using (var reader = new StreamReader(assembly.GetManifestResourceStream(manifestResourceName), Encoding.Default))
-            {
-                return ReadProperties(reader.ReadToEnd());
+                throw new EventSourcingException("不能重复设置框架运行环境");
             }
+            _environment = environment;
         }
-        /// <summary>从xml文本中读取配置
+        /// <summary>
+        /// 通过某个IConfigurationInstaller来对当前Configuration进行设置
         /// </summary>
-        /// <param name="propertiesXml">配置xml文本，格式参见properties.config</param>
+        /// <param name="installer"></param>
         /// <returns></returns>
-        public Configuration ReadProperties(string propertiesXml)
+        public Configuration Install(IConfigurationInstaller installer)
         {
-            IList<ConfigItem> configItems;
-            return ReadProperties(propertiesXml, out configItems);
-        }
-        /// <summary>从xml文本中读取配置
-        /// <remarks>若出现重复的配置将会覆盖</remarks>
-        /// </summary>
-        /// <param name="propertiesXml">配置xml文本，格式参见properties.config</param>
-        /// <param name="configItems">本次读取的列表</param>
-        /// <returns></returns>
-        public Configuration ReadProperties(string propertiesXml, out IList<ConfigItem> configItems)
-        {
-            var body = propertiesXml;
-            var items = new List<ConfigItem>();
-            var el = XElement.Parse(body).Element("properties");
-
-            el.Descendants()
-                .ToList()
-                .ForEach(p =>
-                {
-                    var item = new ConfigItem() { Key = p.Name.LocalName, Value = p.Value };
-                    items.Add(item);
-                    if (this._properties.ContainsKey(item.Key))
-                    {
-                        this._properties[item.Key] = item;
-                    }
-                    else
-                    {
-                        this._properties.Add(p.Name.LocalName, item);
-                    }
-                });
-
-            configItems = items;
+            installer.Install(this);
             return this;
         }
-        /// <summary>将所有配置项写入文件
-        /// </summary>
-        /// <returns></returns>
-        public Configuration RenderProperties()
-        {
-            using (var stream = new MemoryStream())
-            using (var writer = new StreamWriter(stream, Encoding.UTF8))
-            {
-                var xml = XElement.Parse(
-                  @"<?xml version='1.0' encoding='utf-8' ?>
-                    <configuration>
-                        <properties></properties> 
-                    </configuration>");
-                this._properties.ToList().ForEach(o => xml.Element("properties").Add(new XElement(XName.Get(o.Key), o.Value.Value)));
-                writer.Write(xml.ToString());
-                writer.Flush();
-                stream.Seek(0, SeekOrigin.Begin);
-                FileHelper.WriteTo(stream, _root, _propertiesFileName, FileMode.Create);
-            }
-            return this;
-        }
-
-        #endregion
-
         /// <summary>
         /// 设置框架需要用到的Ioc容器
         /// </summary>
@@ -210,15 +88,15 @@ namespace CodeSharp.EventSourcing
         /// <summary>
         /// 初始化log4net
         /// </summary>
-        public Configuration Log4NetLogger(string configFile = "log4net.config")
+        public Configuration Log4Net()
         {
-            DependencyResolver.Register<ILoggerFactory>(new Log4NetLoggerFactory(configFile));
+            DependencyResolver.Register<ILoggerFactory>(new Log4NetLoggerFactory(Configuration.Instance.Properties["log4netConfigFile"]));
             return this;
         }
         /// <summary>
-        /// 注册所有框架运行所需要的默认组件
+        /// 注册组件到容器
         /// </summary>
-        public Configuration RegisterAllDefaultComponents(params Assembly[] assemblies)
+        public Configuration RegisterComponents(params Assembly[] assemblies)
         {
             DependencyResolver.RegisterType(typeof(DefaultAggregateRootTypeProvider));
             DependencyResolver.RegisterType(typeof(DefaultAggregateRootEventCallbackMetaDataProvider));
@@ -234,8 +112,8 @@ namespace CodeSharp.EventSourcing
             DependencyResolver.RegisterType(typeof(NoSnapshotPolicy));
             DependencyResolver.RegisterType(typeof(Repository));
             DependencyResolver.RegisterType(typeof(JsonMessageSerializer));
-            DependencyResolver.RegisterType(typeof(MsmqMessageTransport));
             DependencyResolver.RegisterType(typeof(InMemorySubscriptionStorage));
+            DependencyResolver.RegisterType(typeof(MsmqMessageTransport));
             DependencyResolver.RegisterType(typeof(DefaultAsyncMessageBus));
 
             DependencyResolver.Resolve<IAggregateRootTypeProvider>().RegisterAllAggregateRootTypesInAssemblies(assemblies);
@@ -251,7 +129,6 @@ namespace CodeSharp.EventSourcing
             RegisterTypeNameMappings(assemblies);
             RegisterAggregateRootEvents(assemblies);
             InitializeSyncMessageBus(assemblies);
-            InitializeAsyncMessageBus(assemblies);
 
             return this;
         }
@@ -300,25 +177,7 @@ namespace CodeSharp.EventSourcing
             messageBus.RegisterAllSubscribersInAssemblies(assemblies);
             messageBus.Start();
         }
-        /// <summary>
-        /// 初始化异步消息总线
-        /// </summary>
-        private void InitializeAsyncMessageBus(params Assembly[] assemblies)
-        {
-            Address.InitializeLocalAddress(Configuration.Instance.AppName);
-            DependencyResolver.RegisterTypes(x => TypeUtils.IsAsyncSubscriber(x), assemblies);
-            var messageBus = DependencyResolver.Resolve<IAsyncMessageBus>();
-            messageBus.Initialize();
-            messageBus.RegisterAllSubscribersInAssemblies(assemblies);
-            messageBus.Start();
-        }
 
         #endregion
-
-        public class ConfigItem
-        {
-            public string Key { get; set; }
-            public string Value { get; set; }
-        }
     }
 }

@@ -28,12 +28,12 @@ namespace EventSourcing.Sample.Test
 
             try
             {
-                Configuration.ConfigWithEmbeddedXml("EventSourcing.Sample", null, "application_config", Assembly.GetExecutingAssembly(), "EventSourcing.Sample.Test.ConfigFiles")
-                    .RenderProperties()
+                Configuration.Create("EventSourcing.Sample")
+                    .Install(new DefaultConfigurationInstaller(Assembly.GetExecutingAssembly()))
                     .Castle()
-                    .Log4NetLogger("application_config/log4net.config")
-                    .RegisterAllDefaultComponents(assemblies)
-                    .NHibernate("EventSourcing_Sample_Event", assemblies);
+                    .Log4Net()
+                    .RegisterComponents(assemblies)
+                    .NHibernate(assemblies);
             }
             catch (Exception e)
             {

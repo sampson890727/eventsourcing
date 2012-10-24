@@ -5,7 +5,7 @@ using NHibernate.Mapping.ByCode.Conformist;
 
 namespace CodeSharp.EventSourcing.NHibernate
 {
-    public class AggregateRootSnapshotMap : ClassMap<Snapshot>
+    public abstract class AggregateRootSnapshotMap : ClassMap<Snapshot>
     {
         public AggregateRootSnapshotMap(string tableName)
         {

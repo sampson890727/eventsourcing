@@ -91,7 +91,6 @@
     <Compile Include="Domain\MetaData\SnapshotTypeProvider\DefaultSnapshotTypeProvider.cs" />
     <Compile Include="Utils\UniqueIdGenerator.cs" />
     <Compile Include="Utils\TypeUtils.cs" />
-    <Compile Include="Utils\FileHelper.cs" />
     <Compile Include="ILogger.cs" />
     <Compile Include="ILoggerFactory.cs" />
     <Compile Include="Utils\EventSourcingHelper.cs" />
@@ -128,6 +127,9 @@
     <Compile Include="UnitOfWork\DefaultUnitOfWork.cs" />
     <Compile Include="Utils\LockUtility.cs" />
     <Compile Include="IEntityManager.cs" />
+    <Compile Include="IConfigurationInstaller.cs" />
+    <Compile Include="DefaultConfigurationInstaller.cs" />
+    <Compile Include="DefaultSectionHandler.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="log4net">
@@ -138,6 +140,7 @@
       <HintPath>..\..\packages\Newtonsoft.Json.4.5.10\lib\net40\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.configuration" />
     <Reference Include="System.Data" />
     <Reference Include="System.Messaging" />
     <Reference Include="System.Transactions" />

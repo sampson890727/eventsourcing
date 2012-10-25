@@ -57,7 +57,7 @@ namespace CodeSharp.EventSourcing
         /// 设置当前运行环境，可能的值有：Debug,Test,Release，只能设置一次
         /// </summary>
         /// <param name="environment"></param>
-        public void SetEnvironment(string environment)
+        internal void SetEnvironment(string environment)
         {
             if (_environment != null)
             {

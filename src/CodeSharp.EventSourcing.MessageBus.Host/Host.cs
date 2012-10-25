@@ -12,12 +12,13 @@ namespace CodeSharp.EventSourcing.MessageBus.Host
     {
         public virtual DefaultHost Start(StartInfo startInfo)
         {
-            Configuration.Create(startInfo.EndpointName, null, startInfo.ConfigOutputFileRootPath, startInfo.EntryAssembly, startInfo.ConfigResourceNameSpace)
-                .Castle()
-                .Log4Net(startInfo.ConfigOutputFileRootPath + "/" + startInfo.DefaultLog4NetConfigFileName)
-                .RegisterComponents()
-                .NHibernate(startInfo.ScanningAssemblies)
-                .InitAndStartMessageBus(startInfo.EndpointName, startInfo.ScanningAssemblies);
+            //TODO
+            //Configuration.Create(startInfo.EndpointName, null, startInfo.ConfigOutputFileRootPath, startInfo.EntryAssembly, startInfo.ConfigResourceNameSpace)
+            //    .Castle()
+            //    .Log4Net(startInfo.ConfigOutputFileRootPath + "/" + startInfo.DefaultLog4NetConfigFileName)
+            //    .RegisterComponents()
+            //    .NHibernate(startInfo.ScanningAssemblies)
+            //    .InitAndStartMessageBus(startInfo.EndpointName, startInfo.ScanningAssemblies);
 
             return this;
         }

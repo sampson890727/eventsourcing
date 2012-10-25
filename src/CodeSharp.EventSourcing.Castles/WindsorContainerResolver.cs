@@ -1,12 +1,6 @@
 ﻿//Copyright (c) CodeSharp.  All rights reserved.
 
 using System;
-using System.Collections.Generic;
-using Castle.Core;
-using Castle.Core.Configuration;
-using Castle.MicroKernel;
-using Castle.MicroKernel.Context;
-using Castle.MicroKernel.Facilities;
 using Castle.MicroKernel.Registration;
 using Castle.Windsor;
 

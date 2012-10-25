@@ -31,6 +31,8 @@ namespace EventSourcing.Sample.Test
                 Configuration.Create("EventSourcing.Sample")
                     .Install(new DefaultConfigurationInstaller(Assembly.GetExecutingAssembly()))
                     .Castle()
+                    .CastleTransaction()
+                    .CastleUnitOfWorkManager()
                     .Log4Net()
                     .RegisterComponents(assemblies)
                     .NHibernate(assemblies);

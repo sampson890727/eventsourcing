@@ -86,7 +86,7 @@ namespace CodeSharp.EventSourcing
             return this;
         }
         /// <summary>
-        /// 初始化log4net
+        /// 将log4net作为EventSourcing框架的Log记录工具
         /// </summary>
         public Configuration Log4Net()
         {

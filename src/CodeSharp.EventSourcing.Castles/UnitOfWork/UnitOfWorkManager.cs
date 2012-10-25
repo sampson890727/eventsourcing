@@ -2,12 +2,11 @@
 
 using System;
 using Castle.Services.Transaction;
-using ICastleTransaction = Castle.Services.Transaction.ITransaction;
 
 namespace CodeSharp.EventSourcing.Castles
 {
     /// <summary>
-    /// 基于Castle实现的UnitOfWorkManager
+    /// 基于Castle的事务框架实现的UnitOfWorkManager
     /// </summary>
     public class UnitOfWorkManager : MarshalByRefObject, IUnitOfWorkManager
     {
@@ -28,35 +27,26 @@ namespace CodeSharp.EventSourcing.Castles
 
         /// <summary>
         /// 返回一个当前可用的UnitOfWork实例
-        /// </summary>
         /// <remarks>
-        /// UnitOfWork的生命周期和NHibernate Session的生命周期一致；
-        /// 生命周期描述如下：
-        /// 1）如果是用户采用了Castle的Transaction特性的情况，则UnitOfWork的生命周期与Castle的事务的生命周期一致；
-        /// 2）如果是用户不采用Castle的Transaction特性的情况，则UnitOfWork的生命周期就完全和UnitOfWorkStore定义的生命周期一致；
-        /// 需要说明的是：虽然NHibernate Session或者UnitOfWork都是通过ISessionStore或IUnitOfWorkStore来存储的，所以从存储时间的角度来说
-        /// 如果没有主动把Session或UnitOfWork从Store中移除，那么这两个对象的生命周期就是CallContext或者整个HttpContext的生命周期；
-        /// 但是因为我们这里用到了Castle的事务，所以这两个对象的生命周期就不再是整个CallContext或者HttpContext了，而是与Castle的顶层事务TalkativeTransaction
-        /// 的生命周期一致，当TalkativeTransaction Commit完成后，会调用其上面所注册的所有的ISynchronization对象的AfterCompletion方法；
-        /// 目前NHibernate的SessionDisposeSynchronization类会注册到Castle的TalkativeTransaction，所以会被调用，这个类的AfterCompletion方法会
-        /// 将Session从其所属的ISessionStore中移除；
-        /// 同样，Event Sourcing框架也设计了一个UnitOfWorkSynchronization类，这个类也会在那时将UnitOfWork从其所属的UnitOfWorkStore中移除；
+        /// 1. UnitOfWork负责维护所有领域模型内聚合根发生的改变，只要有修改的包括新增的聚合根都会被UnitOfWork监控管理
+        /// 2. UnitOfWork的生命周期与Castle的事务的生命周期一致，即在Castle事务提交之前UnitOfWork会将所有聚合根的修改提交到数据库;
         /// </remarks>
+        /// </summary>
         public IUnitOfWork GetUnitOfWork()
         {
-            UnitOfWorkDelegate unitOfWorkDelegate = _unitofWorkStore.FindCompatibleUnitOfWork(DefaultAlias) as UnitOfWorkDelegate;
-            ICastleTransaction currentTransaction = GetCurrentCastleTransaction();
-            bool hasCastleTransaction = currentTransaction != null;
+            var unitOfWorkDelegate = _unitofWorkStore.FindCompatibleUnitOfWork(DefaultAlias) as UnitOfWorkDelegate;
+            var currentTransaction = GetCurrentTransaction();
+            bool hasTransaction = currentTransaction != null;
 
             if (unitOfWorkDelegate == null)
             {
-                unitOfWorkDelegate = CreateUnitOfWorkDelegate(CreateUnitOfWork(), hasCastleTransaction);
+                unitOfWorkDelegate = CreateUnitOfWorkDelegate(CreateUnitOfWork(), hasTransaction);
                 RegisterUnitOfWorkSynchronization(currentTransaction, unitOfWorkDelegate);
                 _unitofWorkStore.Store(DefaultAlias, unitOfWorkDelegate);
             }
             else
             {
-                unitOfWorkDelegate.UpdateCanAutoDispose(!hasCastleTransaction);
+                unitOfWorkDelegate.UpdateCanAutoDispose(!hasTransaction);
             }
 
             return unitOfWorkDelegate;
@@ -65,7 +55,7 @@ namespace CodeSharp.EventSourcing.Castles
         /// <summary>
         /// 从ITransactionManager获取当前Castle事务
         /// </summary>
-        private ICastleTransaction GetCurrentCastleTransaction()
+        private ITransaction GetCurrentTransaction()
         {
             return DependencyResolver.Resolve<ITransactionManager>().CurrentTransaction;
         }
@@ -86,7 +76,7 @@ namespace CodeSharp.EventSourcing.Castles
         /// <summary>
         /// 注册一个UnitOfWorkSynchronization事务同步对象到当前Castle的顶层事务中
         /// </summary>
-        private void RegisterUnitOfWorkSynchronization(ICastleTransaction transaction, UnitOfWorkDelegate unitofWorkDelegate)
+        private void RegisterUnitOfWorkSynchronization(ITransaction transaction, UnitOfWorkDelegate unitofWorkDelegate)
         {
             if (transaction != null && !transaction.IsChildTransaction)
             {

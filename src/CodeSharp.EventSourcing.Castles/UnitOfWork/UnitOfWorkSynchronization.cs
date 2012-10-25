@@ -11,7 +11,7 @@ namespace CodeSharp.EventSourcing.Castles
     /// </summary>
     public class UnitOfWorkSynchronization : ISynchronization
     {
-        private ITransaction _castleTransaction;
+        private ITransaction _transaction;
         private UnitOfWorkDelegate _unitOfWorkDelegate;
         private IAsyncMessageBus _asyncMessageBus;
         private ILogger _logger;
@@ -20,9 +20,9 @@ namespace CodeSharp.EventSourcing.Castles
         /// <summary>
         /// 构造函数
         /// </summary>
-        public UnitOfWorkSynchronization(ITransaction castleTransaction, UnitOfWorkDelegate unitOfWorkDelegate)
+        public UnitOfWorkSynchronization(ITransaction transaction, UnitOfWorkDelegate unitOfWorkDelegate)
         {
-            _castleTransaction = castleTransaction;
+            _transaction = transaction;
             _unitOfWorkDelegate = unitOfWorkDelegate;
             _asyncMessageBus = DependencyResolver.Resolve<IAsyncMessageBus>();
             _logger = DependencyResolver.Resolve<ILoggerFactory>().Create("EventSourcing.UnitOfWorkSynchronization");
@@ -35,7 +35,7 @@ namespace CodeSharp.EventSourcing.Castles
             //ISynchronization在Castle事务的提交或回滚时都会被调用到，
             //而当在Castle事务回滚时，我们不需要执行UnitOfWork的SubmitChanges方法，
             //所以在这里需要加这个判断，IsRollbackOnlySet为true表示当前Castle的事务在回滚的过程中
-            if (!_castleTransaction.IsRollbackOnlySet)
+            if (!_transaction.IsRollbackOnlySet)
             {
                 var trackingAggregateRootCount = _unitOfWorkDelegate.GetAllTrackingAggregateRoots().Count();
                 if (trackingAggregateRootCount > 0)
@@ -57,7 +57,7 @@ namespace CodeSharp.EventSourcing.Castles
             _unitOfWorkDelegate.InternalDispose();
 
             //只有当Castle事务提交成功时才需要异步分发事件
-            if (!_castleTransaction.IsRollbackOnlySet && _events != null && _events.Count() > 0)
+            if (!_transaction.IsRollbackOnlySet && _events != null && _events.Count() > 0)
             {
                 if (_logger.IsDebugEnabled)
                 {

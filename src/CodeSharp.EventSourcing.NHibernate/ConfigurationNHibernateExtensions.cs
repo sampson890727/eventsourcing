@@ -14,24 +14,25 @@ namespace CodeSharp.EventSourcing.NHibernate
     public static class ConfigurationNHibernateExtensions
     {
         /// <summary>
-        /// NHibernate相关的所有配置
+        /// 将NHibernate作为EventSourcing框架的持久化框架
         /// </summary>
         /// <param name="configuration"></param>
         /// <param name="assemblies"></param>
         /// <returns></returns>
         public static Configuration NHibernate(this Configuration configuration, params Assembly[] assemblies)
         {
-            configuration.RegisterNHibernateComponents(assemblies);
-            configuration.AddFluentNHibernateMappings(assemblies);
-            configuration.CreateAggregateRootEventsDefaultMappingsWithNHibernate(assemblies);
-            configuration.RegisterUnitOfWorkStoreAccordingWithNHibernateSessionStore();
-            configuration.CreateSubscriptionMappingWithNHibernate();
+            RegisterNHibernateComponents(assemblies);
+            AddFluentNHibernateMappings(assemblies);
+            CreateAggregateRootEventsDefaultMappingsWithNHibernate(assemblies);
+            RegisterUnitOfWorkStoreAccordingWithNHibernateSessionStore();
+            CreateSubscriptionMappingWithNHibernate();
             return configuration;
         }
+
         /// <summary>
-        /// 注册NHibernate相关的所有组件
+        /// 注册基于NHibernate实现的所有相关组件
         /// </summary>
-        public static Configuration RegisterNHibernateComponents(this Configuration configuration, params Assembly[] assemblies)
+        private static void RegisterNHibernateComponents(params Assembly[] assemblies)
         {
             DependencyResolver.RegisterType(typeof(NHibernateEventStoreProvider));
             DependencyResolver.RegisterType(typeof(NHibernateSnapshotStoreProvider));
@@ -40,13 +41,11 @@ namespace CodeSharp.EventSourcing.NHibernate
             DependencyResolver.RegisterType(typeof(NHibernateEventQueryService));
             DependencyResolver.RegisterType(typeof(NHibernateEntityManager));
             DependencyResolver.RegisterType(typeof(NHibernateDapperQueryService));
-
-            return configuration;
         }
         /// <summary>
         /// 根据NHibernateSessionStore的类型注册相应的UnitOfWorkStore
         /// </summary>
-        public static Configuration RegisterUnitOfWorkStoreAccordingWithNHibernateSessionStore(this Configuration configuration)
+        private static void RegisterUnitOfWorkStoreAccordingWithNHibernateSessionStore()
         {
             var sessionStoreType = DependencyResolver.Resolve<ISessionStore>().GetType();
             if (sessionStoreType == typeof(WebSessionStore))
@@ -57,26 +56,22 @@ namespace CodeSharp.EventSourcing.NHibernate
             {
                 DependencyResolver.RegisterType(typeof(CallContextUnitOfWorkStore));
             }
-
-            return configuration;
         }
         /// <summary>
         /// 注册给定程序集中的所有的FluentNHibernate ClassMap
         /// </summary>
-        public static Configuration AddFluentNHibernateMappings(this Configuration configuration, params Assembly[] assemblies)
+        private static void AddFluentNHibernateMappings(params Assembly[] assemblies)
         {
             var nhibernateConfiguration = DependencyResolver.Resolve<NHibernateCfg.Configuration>();
             foreach (var assembly in assemblies)
             {
                 nhibernateConfiguration.AddMappingsFromAssembly(assembly);
             }
-
-            return configuration;
         }
         /// <summary>
         /// 自动为给定程序集中的所有的AggregateRoot产生的事件与要保存的表通过NHibernate建立ORM映射
         /// </summary>
-        public static Configuration CreateAggregateRootEventsDefaultMappingsWithNHibernate(this Configuration configuration, params Assembly[] assemblies)
+        private static void CreateAggregateRootEventsDefaultMappingsWithNHibernate(params Assembly[] assemblies)
         {
             var defaultEventTable = Configuration.Instance.Properties["defaultEventTable"];
             if (!string.IsNullOrEmpty(defaultEventTable))
@@ -95,13 +90,13 @@ namespace CodeSharp.EventSourcing.NHibernate
                     nhibernateConfiguration.AddMapping(hbmMapping);
                 }
             }
-            return configuration;
         }
         /// <summary>
         /// 创建异步事件总线的订阅信息（Subscription）的ORM信息
         /// </summary>
-        public static Configuration CreateSubscriptionMappingWithNHibernate(this Configuration configuration)
+        private static void CreateSubscriptionMappingWithNHibernate()
         {
+            //TODO
             //var defaultSubscriptionTable = Configuration.Instance.Properties["defaultSubscriptionTable"];
             //if (!string.IsNullOrEmpty(defaultSubscriptionTable))
             //{
@@ -114,17 +109,6 @@ namespace CodeSharp.EventSourcing.NHibernate
             //    var hbmMapping = mapper.CompileMappingForAllExplicitlyAddedEntities();
             //    nhibernateConfiguration.AddMapping(hbmMapping);
             //}
-            return configuration;
-        }
-
-        private static string GetSettingValue(string key)
-        {
-            var nhibernateConfiguration = DependencyResolver.Resolve<NHibernateCfg.Configuration>();
-            if (nhibernateConfiguration.Properties.ContainsKey(key))
-            {
-                return nhibernateConfiguration.Properties[key];
-            }
-            return null;
         }
     }
 }
